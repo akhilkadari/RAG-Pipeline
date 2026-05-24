@@ -1,0 +1,366 @@
+[
+  {
+    "id": "q01",
+    "category": "lookup",
+    "question": "What Python version is required for Helix engineering setup?",
+    "expected_answer": "Python 3.11 or higher.",
+    "expected_sources": ["engineering_setup.md"]
+  },
+  {
+    "id": "q02",
+    "category": "lookup",
+    "question": "What is the default value of HELIX_DATABASE_URL?",
+    "expected_answer": "postgres://helix:helix@localhost:5432/helix",
+    "expected_sources": ["engineering_setup.md"]
+  },
+  {
+    "id": "q03",
+    "category": "lookup",
+    "question": "How long are bearer tokens for the Helix API valid?",
+    "expected_answer": "60 minutes. Refresh tokens are not supported in v3 and clients must re-authenticate.",
+    "expected_sources": ["api_reference.md"]
+  },
+  {
+    "id": "q04",
+    "category": "lookup",
+    "question": "What is the maximum number of records per insert batch?",
+    "expected_answer": "1000 records per batch.",
+    "expected_sources": ["api_reference.md"]
+  },
+  {
+    "id": "q05",
+    "category": "lookup",
+    "question": "What is the rate limit per token on the Helix API?",
+    "expected_answer": "600 requests per minute per token.",
+    "expected_sources": ["api_reference.md"]
+  },
+  {
+    "id": "q06",
+    "category": "lookup",
+    "question": "How long is parental leave at Helix?",
+    "expected_answer": "16 weeks of fully paid leave for all new parents, plus an optional 4 weeks of part-time return-to-work transition in the following 6 months.",
+    "expected_sources": ["onboarding.md"]
+  },
+  {
+    "id": "q07",
+    "category": "lookup",
+    "question": "What home office stipend do remote employees receive?",
+    "expected_answer": "A one-time $1,500 home office stipend.",
+    "expected_sources": ["onboarding.md"]
+  },
+  {
+    "id": "q08",
+    "category": "lookup",
+    "question": "What is the 401(k) match policy?",
+    "expected_answer": "Helix matches 100% of contributions up to 6% of salary, vesting immediately. Automatic enrollment at 4% pre-tax after 30 days.",
+    "expected_sources": ["onboarding.md"]
+  },
+  {
+    "id": "q09",
+    "category": "lookup",
+    "question": "Are SMS-based MFA codes allowed for Helix engineering accounts?",
+    "expected_answer": "No. SMS-based MFA is forbidden for engineering accounts; hardware-backed MFA (YubiKey or platform authenticator) is required.",
+    "expected_sources": ["security_policy.md"]
+  },
+  {
+    "id": "q10",
+    "category": "lookup",
+    "question": "How long are audit logs retained?",
+    "expected_answer": "7 years, per SOC 2 requirements.",
+    "expected_sources": ["security_policy.md"]
+  },
+  {
+    "id": "q11",
+    "category": "lookup",
+    "question": "What encryption algorithm does Helix use at rest?",
+    "expected_answer": "AES-256-GCM.",
+    "expected_sources": ["security_policy.md"]
+  },
+  {
+    "id": "q12",
+    "category": "lookup",
+    "question": "How long does just-in-time production access last?",
+    "expected_answer": "4 hours, after which it expires.",
+    "expected_sources": ["security_policy.md"]
+  },
+  {
+    "id": "q13",
+    "category": "lookup",
+    "question": "What is the published p99 latency target for ingestion?",
+    "expected_answer": "250 ms for the record-accepted p99.",
+    "expected_sources": ["architecture.md"]
+  },
+  {
+    "id": "q14",
+    "category": "lookup",
+    "question": "What size are Hyperion segments?",
+    "expected_answer": "Approximately 1 GB per segment.",
+    "expected_sources": ["architecture.md"]
+  },
+  {
+    "id": "q15",
+    "category": "lookup",
+    "question": "What regions does Helix run in?",
+    "expected_answer": "us-east-1 (primary), eu-west-1, and ap-southeast-1.",
+    "expected_sources": ["architecture.md"]
+  },
+  {
+    "id": "q16",
+    "category": "lookup",
+    "question": "What is the Helix Starter tier monthly cost?",
+    "expected_answer": "$0/month, with 10GB stored, 1M records/month, and 100GB scanned/month.",
+    "expected_sources": ["billing_glossary.md"]
+  },
+  {
+    "id": "q17",
+    "category": "lookup",
+    "question": "What does BYOK stand for in the Helix glossary?",
+    "expected_answer": "Bring Your Own Key — the customer's KMS key encrypts their data; Helix never holds the unencrypted key.",
+    "expected_sources": ["billing_glossary.md"]
+  },
+  {
+    "id": "q18",
+    "category": "lookup",
+    "question": "When does Helix migrate data to cold tier?",
+    "expected_answer": "Segments older than 90 days are migrated to S3 Glacier Instant Retrieval.",
+    "expected_sources": ["billing_glossary.md"]
+  },
+  {
+    "id": "q19",
+    "category": "lookup",
+    "question": "What is the dataset retention default and maximum?",
+    "expected_answer": "Default 90 days, maximum 730 days.",
+    "expected_sources": ["api_reference.md"]
+  },
+  {
+    "id": "q20",
+    "category": "lookup",
+    "question": "How long is the soft-delete window for a deleted dataset?",
+    "expected_answer": "30 days, during which the dataset name remains reserved.",
+    "expected_sources": ["api_reference.md"]
+  },
+  {
+    "id": "q21",
+    "category": "lookup",
+    "question": "What error code indicates a record schema mismatch?",
+    "expected_answer": "400 SCHEMA_MISMATCH.",
+    "expected_sources": ["api_reference.md"]
+  },
+  {
+    "id": "q22",
+    "category": "lookup",
+    "question": "Which port should I use if 5432 is already taken locally?",
+    "expected_answer": "Override to port 5433 by setting HELIX_DATABASE_URL=postgres://helix:helix@localhost:5433/helix and updating docker-compose.yml accordingly.",
+    "expected_sources": ["troubleshooting.md"]
+  },
+  {
+    "id": "q23",
+    "category": "lookup",
+    "question": "How long is the query result cache valid?",
+    "expected_answer": "5 minutes, keyed by dataset_id, query_hash, and schema_version.",
+    "expected_sources": ["troubleshooting.md"]
+  },
+  {
+    "id": "q24",
+    "category": "lookup",
+    "question": "What is the default query timeout?",
+    "expected_answer": "60 seconds, extendable up to 600 via the timeout_seconds query parameter.",
+    "expected_sources": ["troubleshooting.md"]
+  },
+  {
+    "id": "q25",
+    "category": "lookup",
+    "question": "Does Helix support recursive CTEs?",
+    "expected_answer": "No. Window functions are supported, but recursive CTEs are not.",
+    "expected_sources": ["api_reference.md"]
+  },
+  {
+    "id": "q26",
+    "category": "lookup",
+    "question": "What pattern must dataset names match?",
+    "expected_answer": "The regex ^[a-z][a-z0-9_]{2,63}$.",
+    "expected_sources": ["api_reference.md"]
+  },
+  {
+    "id": "q27",
+    "category": "lookup",
+    "question": "What is Hyperion?",
+    "expected_answer": "A custom columnar store used as the storage layer in the Helix data plane.",
+    "expected_sources": ["architecture.md"]
+  },
+  {
+    "id": "q28",
+    "category": "lookup",
+    "question": "What is the bug bounty payout range?",
+    "expected_answer": "$250 (low) to $25,000 (critical) per the bounty rubric.",
+    "expected_sources": ["security_policy.md"]
+  },
+  {
+    "id": "q29",
+    "category": "lookup",
+    "question": "Where are Helix secrets stored?",
+    "expected_answer": "HashiCorp Vault under secret/helix/<env>/<service>.",
+    "expected_sources": ["security_policy.md"]
+  },
+  {
+    "id": "q30",
+    "category": "lookup",
+    "question": "What test command runs the local Helix unit tests?",
+    "expected_answer": "pytest tests/ -m \"not slow\".",
+    "expected_sources": ["engineering_setup.md"]
+  },
+  {
+    "id": "q31",
+    "category": "multi_hop",
+    "question": "If a Growth-tier customer ingests records and the Kafka topic returns INGESTION_BACKPRESSURE, how long should they back off and at what billing rate would the dropped traffic be?",
+    "expected_answer": "Clients should back off with exponential backoff starting at 60 seconds up to 600 seconds. Records that are dropped because they failed schema validation are returned in the response — they are not silently retried, so failed records are not billed (only successfully ingested records count toward the per-million pricing).",
+    "expected_sources": ["api_reference.md", "troubleshooting.md", "billing_glossary.md"]
+  },
+  {
+    "id": "q32",
+    "category": "multi_hop",
+    "question": "An engineer wants to use a Linux workstation and asks about MFA. Are both requests permitted, and what hardware do they need?",
+    "expected_answer": "Yes to both. Linux workstations are allowed in lieu of a Mac with manager approval. MFA must be hardware-backed (YubiKey or platform authenticator); SMS is not allowed.",
+    "expected_sources": ["onboarding.md", "security_policy.md"]
+  },
+  {
+    "id": "q33",
+    "category": "multi_hop",
+    "question": "How does data flow from a client POST through to S3 storage?",
+    "expected_answer": "The client posts records to POST /v3/datasets/{id}/records. The control plane validates the schema and writes records to a per-dataset Kafka topic. A Flink job consumes the topic, partitions by partition_key, and writes to Hyperion. Hyperion writes immutable Zstandard-compressed columnar segments to S3 and updates the manifest in Postgres.",
+    "expected_sources": ["architecture.md"]
+  },
+  {
+    "id": "q34",
+    "category": "multi_hop",
+    "question": "If a customer's data is in cold tier and they exceed the Growth-tier scanned-data allowance, what is the effective per-TB scan cost?",
+    "expected_answer": "Cold-tier scans carry a 2x bytes-scanned multiplier, and Growth-tier query scans cost $5 per TB above the included allowance, so cold-tier scans effectively cost $10 per TB scanned.",
+    "expected_sources": ["billing_glossary.md"]
+  },
+  {
+    "id": "q35",
+    "category": "multi_hop",
+    "question": "If I'm onboarding and need to enroll MFA, what device do I use and where do I sign in?",
+    "expected_answer": "Sign in to Okta using the temporary password emailed to your personal address, then enroll a YubiKey when prompted. Hardware-backed MFA is mandatory.",
+    "expected_sources": ["onboarding.md", "security_policy.md"]
+  },
+  {
+    "id": "q36",
+    "category": "multi_hop",
+    "question": "A query times out and I want to know how to extend the timeout and how that affects billing.",
+    "expected_answer": "Pass timeout_seconds up to 600 in the query request. Queries scanning more than 1TB are billed at the standard rate even if they time out.",
+    "expected_sources": ["troubleshooting.md", "billing_glossary.md"]
+  },
+  {
+    "id": "q37",
+    "category": "multi_hop",
+    "question": "A customer wants BYOK and multi-region replication. What tier do they need and what is the RPO?",
+    "expected_answer": "They need the Enterprise tier. Cross-region replication is offered as an Enterprise feature with eventual consistency at an RPO of 5 minutes.",
+    "expected_sources": ["billing_glossary.md", "architecture.md"]
+  },
+  {
+    "id": "q38",
+    "category": "multi_hop",
+    "question": "What is required to fix a 403 INSUFFICIENT_SCOPE error and how does that interact with token expiration?",
+    "expected_answer": "Token scopes are issued at creation time and cannot be modified. Generate a new token with the required scopes (e.g., helix auth login --scopes datasets:write,datasets:read). New tokens last 60 minutes.",
+    "expected_sources": ["troubleshooting.md", "api_reference.md"]
+  },
+  {
+    "id": "q39",
+    "category": "multi_hop",
+    "question": "What happens to records that fail schema validation, and how would a customer detect missing rows?",
+    "expected_answer": "Failed records are returned in the POST records response with their index and error reason. They are not silently retried. To detect missing rows, inspect the response payload — silent drops are not a Helix bug.",
+    "expected_sources": ["api_reference.md", "troubleshooting.md"]
+  },
+  {
+    "id": "q40",
+    "category": "multi_hop",
+    "question": "Which on-call engineer leads a security incident and what is the reporting window?",
+    "expected_answer": "Suspected security incidents must be reported within 30 minutes via the #sec-incident Slack channel and by paging the on-call security engineer through PagerDuty. The on-call security engineer is the incident commander until they explicitly hand off.",
+    "expected_sources": ["security_policy.md"]
+  },
+  {
+    "id": "q41",
+    "category": "no_answer",
+    "question": "What is the office address of Helix headquarters?",
+    "expected_answer": "I don't have enough information in the provided documentation to answer that.",
+    "expected_sources": []
+  },
+  {
+    "id": "q42",
+    "category": "no_answer",
+    "question": "Who is the current CEO of Helix?",
+    "expected_answer": "I don't have enough information in the provided documentation to answer that.",
+    "expected_sources": []
+  },
+  {
+    "id": "q43",
+    "category": "no_answer",
+    "question": "How many engineers does Helix employ?",
+    "expected_answer": "I don't have enough information in the provided documentation to answer that.",
+    "expected_sources": []
+  },
+  {
+    "id": "q44",
+    "category": "no_answer",
+    "question": "Does Helix offer a Python SDK?",
+    "expected_answer": "I don't have enough information in the provided documentation to answer that.",
+    "expected_sources": []
+  },
+  {
+    "id": "q45",
+    "category": "no_answer",
+    "question": "What is the maximum size of a single Helix record?",
+    "expected_answer": "I don't have enough information in the provided documentation to answer that.",
+    "expected_sources": []
+  },
+  {
+    "id": "q46",
+    "category": "ambiguous",
+    "question": "How long is leave at Helix?",
+    "expected_answer": "Helix offers unlimited PTO with an expectation of at least 15 days per year, separate sick leave with no cap, and 16 weeks of fully paid parental leave.",
+    "expected_sources": ["onboarding.md"]
+  },
+  {
+    "id": "q47",
+    "category": "ambiguous",
+    "question": "What scopes do I need?",
+    "expected_answer": "Token scopes are required for actions like dataset writes (datasets:write) and dataset reads (datasets:read). Scopes are set at token creation and cannot be modified after.",
+    "expected_sources": ["api_reference.md", "troubleshooting.md"]
+  },
+  {
+    "id": "q48",
+    "category": "ambiguous",
+    "question": "What happens after I delete a dataset?",
+    "expected_answer": "The dataset is soft-deleted; records are purged after 30 days and the name is reserved during this window.",
+    "expected_sources": ["api_reference.md"]
+  },
+  {
+    "id": "q49",
+    "category": "lookup",
+    "question": "What schema evolution is allowed for a dataset?",
+    "expected_answer": "Schemas may evolve via additive changes only; removing fields requires creating a new dataset.",
+    "expected_sources": ["billing_glossary.md"]
+  },
+  {
+    "id": "q50",
+    "category": "lookup",
+    "question": "What is the SLA service-credit formula?",
+    "expected_answer": "Service credit equals 10% of the monthly fee per 0.1% of availability shortfall below the SLA target, up to a maximum of 50% of the monthly fee.",
+    "expected_sources": ["billing_glossary.md"]
+  },
+  {
+    "id": "q51",
+    "category": "multi_hop",
+    "question": "If I'm a new engineer and want to ship my first PR, what training must I complete and what kind of PR is traditional?",
+    "expected_answer": "Mandatory training in Workday includes Helix Code of Conduct, Data Handling 101, and Incident Response 101. Engineering Standards is recommended. Your first PR is traditionally a typo fix or doc change.",
+    "expected_sources": ["onboarding.md"]
+  },
+  {
+    "id": "q52",
+    "category": "lookup",
+    "question": "What format does the audit log NOT include?",
+    "expected_answer": "Sensitive payloads — such as records and query results — are not logged. Only metadata (actor, action, resource ID, source IP, request ID, result) is logged.",
+    "expected_sources": ["security_policy.md"]
+  }
+]

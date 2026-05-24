@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    container_name: helix-rag-api
+    env_file:
+      - .env
+    environment:
+      - RAW_DIR=/app/data/raw
+      - PROCESSED_DIR=/app/data/processed
+      - INDEX_DIR=/app/data/index
+      # Silence ChromaDB's broken telemetry (known bug in chromadb==0.5.5)
+      - ANONYMIZED_TELEMETRY=False
+      - CHROMA_TELEMETRY_IMPL=none
+      # Silence onnxruntime CPU vendor warning (we don't use ONNX)
+      - ORT_LOGGING_LEVEL=4
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "python -m scripts.seed && uvicorn src.api.main:app --host 0.0.0.0 --port 8000"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: helix-rag-frontend
+    environment:
+      - RAG_API_BASE=http://api:8000
+    depends_on:
+      - api
+    ports:
+      - "8501:8501"

@@ -27,7 +27,7 @@ class BaseLoader(ABC):
     @staticmethod
     def _base_metadata(path: Path) -> dict[str, Any]:
         return {
-            "source": str(path),
+            "source": str(path.resolve()),
             "filename": path.name,
             "file_type": path.suffix.lstrip(".").lower(),
             "loaded_at": datetime.now(timezone.utc).isoformat(),

@@ -5,7 +5,7 @@ from pathlib import Path
 from .base import BaseLoader, Document
 
 class TextLoader(BaseLoader):
-    SUPPORTED_EXTENSIONS = (".txt")
+    SUPPORTED_EXTENSIONS = (".txt",)
 
     def load(self, path: Path) -> list[Document]:
         raw = path.read_text(encoding="utf-8")

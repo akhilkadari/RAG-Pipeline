@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environment
+.venv/
+venv/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Project data
+# Keep raw uploads out of git so the repo stays small.
+# Processed outputs and indexes are derived artifacts.
+data/raw/*
+!data/raw/.gitkeep
+!data/raw/sample_corpus/
+!data/raw/sample_corpus/**
+data/processed/*
+!data/processed/.gitkeep
+data/index/
+data/eval/last_run.json
+data/eval/chunking_comparison.json
+data/eval/chunking_comparison.md

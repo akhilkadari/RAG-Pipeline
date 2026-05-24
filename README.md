@@ -2,24 +2,19 @@
 
 A production-grade Retrieval-Augmented Generation system that ingests internal documentation, indexes it with **both dense vector and sparse keyword** search, retrieves the most relevant context for any question, and generates **grounded answers with inline citations** that are programmatically verified.
 
-> Pitch line for interviews:
-> *"I built a RAG system with hybrid search, citation verification, and a confidence scorer that tells you when to trust the answer. On a 50+ question eval suite, hybrid retrieval beat dense-only by **X%** on faithfulness and **Y%** on retrieval relevance."*
->
-> (Run `python -m scripts.eval --mode hybrid` and `--mode dense` to fill in your own X / Y.)
-
 ---
-
-## Why this project is interview-grade
 
 Most RAG demos fall apart on three things. This project addresses each head-on:
 
-| Production concern | What's typically skipped | What this project does |
-|---|---|---|
-| **Retrieval over technical docs** | Pure dense retrieval misses exact tokens (`SCHEMA_MISMATCH`, `helix-jit`, `429`) | Hybrid dense + BM25 with **Reciprocal Rank Fusion**, configurable weights, and an LLM-as-judge reranker |
-| **Citation accuracy** | Models hallucinate citations — `[1]` doesn't actually support the claim | Every (claim, citation) pair is sent to a verifier judge; unsupported citations are flagged in the API response |
-| **"I don't know"** | The model invents an answer when context is thin | Below-threshold retrieval triggers a structured fallback that names which documents *might* have the answer, instead of fabricating |
-| **Chunking strategy choice** | "We just used the default" | Three switchable strategies (fixed-size, recursive, semantic) compared on the same eval suite |
-| **Eval discipline** | One PDF, vibes-based testing | 50+ hand-written golden Q&As across lookup / multi-hop / no-answer / ambiguous categories with automated metrics |
+
+| Production concern                | What's typically skipped                                                         | What this project does                                                                                                              |
+| --------------------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **Retrieval over technical docs** | Pure dense retrieval misses exact tokens (`SCHEMA_MISMATCH`, `helix-jit`, `429`) | Hybrid dense + BM25 with **Reciprocal Rank Fusion**, configurable weights, and an LLM-as-judge reranker                             |
+| **Citation accuracy**             | Models hallucinate citations — `[1]` doesn't actually support the claim          | Every (claim, citation) pair is sent to a verifier judge; unsupported citations are flagged in the API response                     |
+| **"I don't know"**                | The model invents an answer when context is thin                                 | Below-threshold retrieval triggers a structured fallback that names which documents *might* have the answer, instead of fabricating |
+| **Chunking strategy choice**      | "We just used the default"                                                       | Three switchable strategies (fixed-size, recursive, semantic) compared on the same eval suite                                       |
+| **Eval discipline**               | One PDF, vibes-based testing                                                     | 50+ hand-written golden Q&As across lookup / multi-hop / no-answer / ambiguous categories with automated metrics                    |
+
 
 ---
 
@@ -185,7 +180,7 @@ The compose stack auto-runs `scripts.seed` before launching the API.
 - `src/loaders/` — `BaseLoader` plus per-format implementations (`pypdf`, `markdown-it`, `BeautifulSoup`). Every loader returns a list of `Document` (`text` + `metadata`). Strict UTF-8 by default — bad encodings raise loudly so you find them in development.
 - `src/chunking/` — three strategies:
   - `FixedSizeChunker` — char-window baseline (LangChain `CharacterTextSplitter`).
-  - `RecursiveChunker` — heading-aware (`# ` → `## ` → paragraph → sentence).
+  - `RecursiveChunker` — heading-aware (`#`  → `##`  → paragraph → sentence).
   - `SemanticChunker` — embeds sentence neighbourhoods, splits at the 90th percentile of consecutive cosine distances.
 - `src/indexing/pipeline.py` — `Documents → chunks → embed → dedup (cosine ≥ 0.95) → Chroma + BM25 in lockstep`. BM25 is rebuilt from the union of indexed chunks every run so the two indexes never drift.
 - `src/indexing/deduplicator.py` — both exact hash and cosine near-duplicate detection.
@@ -236,21 +231,23 @@ The compose stack auto-runs `scripts.seed` before launching the API.
 
 ## Configuration knobs (`.env`)
 
-| Variable | Default | What it controls |
-|---|---|---|
-| `OPENAI_API_KEY` | — | Required. |
-| `EMBEDDING_MODEL` | `text-embedding-3-small` | Embedder. |
-| `GENERATION_MODEL` | `gpt-4o-mini` | Answer generator. Set to `gpt-4o` for higher quality. |
-| `JUDGE_MODEL` | `gpt-4o-mini` | Reranker + verifier + completeness. |
-| `LLM_PROVIDER` | `openai` | `openai` or `anthropic`. |
-| `DEFAULT_CHUNKER` | `recursive` | `fixed_size` / `recursive` / `semantic`. |
-| `CHUNK_SIZE` / `CHUNK_OVERLAP` | `800` / `120` | Chunker tuning. |
-| `DENSE_TOP_K` / `SPARSE_TOP_K` | `10` / `10` | First-pass retrieval. |
-| `RRF_DENSE_WEIGHT` / `RRF_SPARSE_WEIGHT` | `0.7` / `0.3` | Bias toward semantic vs keyword. |
-| `RRF_K_CONSTANT` | `60` | RRF dampening constant. |
-| `RERANK_INPUT` / `RERANK_OUTPUT` | `20` / `5` | Reranker window. |
-| `DEDUP_THRESHOLD` | `0.95` | Cosine threshold for dropping near-duplicates. |
-| `CONFIDENCE_THRESHOLD` | `0.35` | Below this → graceful IDK. |
+
+| Variable                                 | Default                  | What it controls                                      |
+| ---------------------------------------- | ------------------------ | ----------------------------------------------------- |
+| `OPENAI_API_KEY`                         | —                        | Required.                                             |
+| `EMBEDDING_MODEL`                        | `text-embedding-3-small` | Embedder.                                             |
+| `GENERATION_MODEL`                       | `gpt-4o-mini`            | Answer generator. Set to `gpt-4o` for higher quality. |
+| `JUDGE_MODEL`                            | `gpt-4o-mini`            | Reranker + verifier + completeness.                   |
+| `LLM_PROVIDER`                           | `openai`                 | `openai` or `anthropic`.                              |
+| `DEFAULT_CHUNKER`                        | `recursive`              | `fixed_size` / `recursive` / `semantic`.              |
+| `CHUNK_SIZE` / `CHUNK_OVERLAP`           | `800` / `120`            | Chunker tuning.                                       |
+| `DENSE_TOP_K` / `SPARSE_TOP_K`           | `10` / `10`              | First-pass retrieval.                                 |
+| `RRF_DENSE_WEIGHT` / `RRF_SPARSE_WEIGHT` | `0.7` / `0.3`            | Bias toward semantic vs keyword.                      |
+| `RRF_K_CONSTANT`                         | `60`                     | RRF dampening constant.                               |
+| `RERANK_INPUT` / `RERANK_OUTPUT`         | `20` / `5`               | Reranker window.                                      |
+| `DEDUP_THRESHOLD`                        | `0.95`                   | Cosine threshold for dropping near-duplicates.        |
+| `CONFIDENCE_THRESHOLD`                   | `0.35`                   | Below this → graceful IDK.                            |
+
 
 ---
 
@@ -262,16 +259,7 @@ pytest tests/ -v
 
 Tests cover loaders, chunkers, RRF fusion math, deduplication, citation parsing, and BM25 round-trips. They do **not** require an OpenAI API key — every LLM-touching path is exercised through scripts/eval, not unit tests.
 
----
 
-## Talking points for interviews
-
-1. **"Why hybrid?"** Pure dense retrieval underperforms on technical docs because exact tokens (`SCHEMA_MISMATCH`, `429`, `helix-jit`) don't always cluster well in the embedding space. BM25 catches them. Show the chunking comparison report as evidence.
-2. **"What stops the model from hallucinating?"** Three layers: (a) the grounded prompt forbids outside knowledge, (b) the citation verifier flags unsupported citations after generation, (c) the confidence threshold short-circuits to a structured IDK response when retrieval is weak.
-3. **"How would you scale this?"** Chroma → Qdrant or pgvector for multi-tenant. BM25 → Elasticsearch / OpenSearch. Reranker → a hosted cross-encoder (e.g., Cohere Rerank, bge-reranker-v2) for lower latency than LLM-as-judge. Cache embeddings by content hash. Move the eval into CI so every PR runs the full suite.
-4. **"How do you decide on chunk size?"** Empirically — that's what `compare_chunking.py` is for. Show the table.
-
----
 
 ## License
 
